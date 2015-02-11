@@ -19,7 +19,7 @@ public class View extends JFrame {
 	
 	public View () {
 		super("CGIP SV1 - Triangle Rasterizer");
-		Surface s = new Surface(0.08, 0.7, 0.1, 1, new Color(10, 160, 250));
+		Surface s = new Surface(0.0, 0.7, 0.2, 1, new Color(10, 160, 250));
 		r = new Rasterizer(WIDTH, HEIGHT, s);
 		
 		try {
@@ -65,7 +65,14 @@ public class View extends JFrame {
 				int v1 = Integer.parseInt(arr[1].split("//")[0]) - 1;
 				int v2 = Integer.parseInt(arr[2].split("//")[0]) - 1;
 				int v3 = Integer.parseInt(arr[3].split("//")[0]) - 1;
-				triangles.add(new Triangle(vertices.get(v1), vertices.get(v2), vertices.get(v3)));
+				Vertex A = vertices.get(v1), B = vertices.get(v2), C = vertices.get(v3);
+				triangles.add(new Triangle(A, B, C));
+				int n1 = Integer.parseInt(arr[1].split("//")[1]) - 1;
+				int n2 = Integer.parseInt(arr[2].split("//")[1]) - 1;
+				int n3 = Integer.parseInt(arr[3].split("//")[1]) - 1;
+				A.setNormal(vertices.get(n1));
+				B.setNormal(vertices.get(n2));
+				C.setNormal(vertices.get(n3));
 			}
 		}
 		

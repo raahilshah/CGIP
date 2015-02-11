@@ -2,23 +2,31 @@ package uk.ac.cam.rds46.cgip.sv1;
 
 public class Vertex {
 	public double x, y, z;
+	public Vertex N;
 	
 	public Vertex() {
 		x = 0.0;
 		y = 0.0;
 		z = 0.0;
+		N = null;
 	}
 	
 	public Vertex(Vertex V) {
 		x = V.x;
 		y = V.y;
 		z = V.z;
+		N = V.N;
 	}
 	
 	public Vertex(double a, double b, double c) {
 		x = a;
 		y = b;
 		z = c;
+		N = null;
+	}
+	
+	public void setNormal(Vertex n) {
+		N = n;
 	}
 	
 	// 3D vector dot product.

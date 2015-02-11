@@ -55,6 +55,7 @@ public class Rasterizer extends JPanel {
 		Vertex AB = t.B.minus(t.A);
 		Vertex AC = t.C.minus(t.A);
 		
+		// Light source assumed at an infinite distance so L is constant.
 		Vertex N = t.calculateNormal(); // Unit normal to the surface.
 		Vertex L = LS.minus(t.A); // Vector to light source.
 		L.normalize();
@@ -64,11 +65,16 @@ public class Rasterizer extends JPanel {
 		Vertex V = new Vertex(0, 0, -1); // Vector to the eye.
 		V.normalize();
 		
-		// Ambient + Diffuse + Specular.
-		double I = s.ka + s.kd * (L.dotWith(N)) + s.ks * Math.pow(R.dotWith(V), s.nExp);
-		
-		if (I < 0) I = 0;
-		System.out.println(I);
+		// Calculating reflection based on the Phong reflection model.
+		double ambiant = s.ka, diffuse = 0.0, specular = 0.0, I = ambiant;
+		diffuse = s.kd * L.dotWith(N);
+		if (diffuse > 0) {
+			specular = s.ks * Math.pow(R.dotWith(V), s.nExp);
+			if (specular < 0) specular = 0.0;
+			I = ambiant + diffuse + specular;
+		}
+		if (I > 1) I = 1;
+		System.out.println(ambiant + " " + diffuse + " " + specular);
 		
 		Color c = new Color((int)(s.color.getRed() * I), 
 							(int)(s.color.getGreen() * I),
