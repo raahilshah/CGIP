@@ -11,7 +11,7 @@ public class Triangle implements Comparable<Triangle> {
 	}
 	
 	public Vertex calculateNormal() {
-		Vertex N = (B.minus(A)).crossWith3D((C.minus(A))); 
+		Vertex N = (B.minus(A)).crossWith((C.minus(A))); 
 		N.normalize();
 		return N;
 	}

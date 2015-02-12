@@ -71,7 +71,7 @@ public class View extends JFrame {
 				int n2 = Integer.parseInt(arr[2].split("//")[1]) - 1;
 				int n3 = Integer.parseInt(arr[3].split("//")[1]) - 1;
 				A.setNormal(vertices.get(n1));
-				B.setNormal(vertices.get(n2));
+				B.setNormal(vertices.get(n2)); 
 				C.setNormal(vertices.get(n3));
 			}
 		}

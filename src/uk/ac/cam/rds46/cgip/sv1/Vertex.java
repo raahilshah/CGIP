@@ -33,14 +33,8 @@ public class Vertex {
 	public double dotWith(Vertex V) {
 		return x * V.x + y * V.y + z * V.z;
 	}
-	
-	// 2D vector cross product 'z' component.
-	public double crossWith2D(Vertex V) {
-		return (x * V.y) - (y * V.x);
-	}
-	
 	// 3D cross product this x V.
-	public Vertex crossWith3D(Vertex V) {
+	public Vertex crossWith(Vertex V) {
 		Vertex cross = new Vertex();
 		cross.x = y * V.z - z * V.y;
 		cross.y = - (x * V.z - z * V.x);
@@ -71,11 +65,19 @@ public class Vertex {
 		y = n * y;
 		z = n * z;
 	}
+	public Vertex multiplyWith(double n) {
+		return new Vertex(n * x, n * y, n * z);
+	}
 	
 	public void normalize() {
 		double n = Math.sqrt(x * x + y * y + z * z);
 		x = x / n;
 		y = y / n;
 		z = z / n;
+	}
+	
+	@Override
+	public String toString() {
+		return  "(" + x + ", " + y + ", " + z + ")";
 	}
 }
