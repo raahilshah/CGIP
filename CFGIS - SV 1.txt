@@ -1,0 +1,67 @@
+CFGIS - SV 1
+------------
+
+Reflection
+-------------
+
+N = || (B - A) x (C - A) ||
+diff = N . ||LS - P||
+dpec = (E.R)^n
+
+I = ka + kd * SUM over LS's diff + SUM over LS's spec
+
+(ka, kd, ks) -> properties of the material
+
+Could alter these dynamically to get say shiny water diffuse land etc.
+
+Perspective
+------------
+
+Perspective Matrices
+
+As z increases, x, y shrink to the origin
+P = [x, y, z], P' = [x/z, y/z, ~z]
+
+homogeneous coordinates notational trick [A, B, C] => [A.w, B.w, C.w, w] <= divide by w...
+
+1 0 0 0 	x		x		x/z
+0 1 0 0	 x	y	= 	y	=	y/z
+0 0 1 1		z		z+1		1 + 1/z * 
+0 0 1 0		q		z	
+
+For * we don't care what we get (should involve z).	
+
+Rasterization:
+---------------
+
+Scanline:
+	- Sort edges by y: [AB]CD
+	- One set of active edges, compute bounding x's and draw line there.
+
+Use z-buffer for painter's algorithm. 
+
+z-buffer is vulnerable to floating point issues.
+
+Interpolation
+--------------
+
+Because of perspective you need to interpolate in 1/z not in screen space.
+
+Interpolation with barycentric coordinates. Ratio of areas.
+
+Weighted average. 
+
+Sampling and Quantization:
+---------------------------
+
+Increase the sampling -> increasing resolution, decreasing gap, increasing size.
+Quantization for colour
+
+Constrained by bandwidth and want to increase both quantization and sampling. 
+
+Human eye can only see about 6/7 bits of blue and 7/8 bits of green and 10/13 bits of green.
+Rods -> lower processing, higher refresh rates than cones, differencing.
+Cones -> high processing, 1/10 the refresh rate of Rods.
+
+
+

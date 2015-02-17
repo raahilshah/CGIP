@@ -1,0 +1,44 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper]{geometry}
+\usepackage{amsmath, amsthm, amssymb, amsthm, graphicx}
+\renewcommand\labelenumi{\alph{enumi}.}
+\renewcommand\labelenumii{\roman{enumii}.}
+\renewcommand\labelitemi{--}
+
+
+\title{1B - Computer Graphics and Image Processing\\
+Supervision 2}
+\author{Raahil Shah\\
+\texttt{rds46@cam.ac.uk}}
+
+\begin{document}
+
+\maketitle
+
+\section{Matrices}
+Give as many reasons as possible why we use matrices to represent transformations. Explain why we use homogeneous co-ordinates
+
+\section{Bezier cubics}
+Derive the conditions necessary for two Bezier curves to join with 
+\begin{itemize}
+	\item Just C0-continuity
+	\item C1-continuity
+	\item C2-continuity. 
+\end{itemize}
+What would be difficult about getting three Bezier curves to join in sequence with C2-continuity at the two joins?
+
+\section{Curves}
+Implement the Midpoint circle drawing algorithm for integer radius and integer center location. 
+Hints: 
+\begin{itemize}
+	\item Implement the algorithm for one octant, centered on the origin, then draw the other octants by manipulating the co-ordinates of the drawn point: (x,y), (-x,y), (y,x), (y,-x), etc.
+	\item Implement the algorithm for a circle centered on the origin and then simply offset the pixel that is drawn by the coordinates of the actual center.
+\end{itemize}
+
+Write the Bézier adaptive algorithm, using your Midpoint line drawing to draw the lines. To test this on a pixel grid of size HxW, try the Bézier curve specified by the four points: (1,1), (2H,1), (-H,W-1), (H-1,W-1). Draw the same Bézier curve at five different tolerances: 33, 10, 3.3, 1, 0.33 pixels.
+Draw something interesting!
+
+
+
+\end{document}
