@@ -2,7 +2,7 @@ package uk.ac.cam.rds46.cgip.sv2;
 
 public class BezierCubic extends Drawable {
 	private Point2D P0, P1, P2, P3;
-	private final double tolerance = 10.0;
+	private final double tolerance = 3.3;
 	
 	public BezierCubic(Point2D Q0, Point2D Q1, Point2D Q2, Point2D Q3) {
 		super();
@@ -28,8 +28,8 @@ public class BezierCubic extends Drawable {
 		if (s < 0) distance = AC.magnitude();
 		else if (s > 1) distance = (B.minus(C)).magnitude();
 		else {
-			double px = A.x + s * AB.x, py = A.y + s * AB.y;
-			distance = Math.sqrt(((C.x - px) * (C.x - px)) + ((C.y - py) * (C.y - py))); 
+			Point2D P = new Point2D(A.x + s * AB.x, A.y + s * AB.y);
+			distance = (C.minus(P)).magnitude();
 		}
 		return distance; 
 	}
@@ -41,7 +41,7 @@ public class BezierCubic extends Drawable {
 	
 	public void draw(Point2D P0, Point2D P1, Point2D P2, Point2D P3) {
 		if (isFlat(P0, P1, P2, P3)) {
-			drawLine(P0.x, P0.y, P3.x, P3.y);
+			drawLine((int)P0.x, (int)P0.y, (int)P3.x, (int)P3.y);
 		}
 		else {
 			Point2D Q0 = P0, 
