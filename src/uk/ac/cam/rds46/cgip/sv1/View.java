@@ -18,8 +18,11 @@ public class View extends JFrame {
 	
 	public View () {
 		super("CGIP SV1 - Triangle Rasterizer");
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		Surface s = new Surface(0.0, 0.7, 0.2, 1, new Color(10, 160, 250));
-		r = new Rasterizer(WIDTH, HEIGHT, s);
+		Vertex L = new Vertex(-1, 1, 1); // Assumed fixed light source at a distance.
+		L.normalize();
+		r = new Rasterizer(WIDTH, HEIGHT, s, L);
 		
 		try {
 			loadFile("wt_teapot.obj");
@@ -58,7 +61,9 @@ public class View extends JFrame {
 				double x = Double.parseDouble(arr[1]);
 				double y = Double.parseDouble(arr[2]);
 				double z = Double.parseDouble(arr[3]);
-				normals.add(new Vertex(x, y, z));
+				Vertex v = new Vertex(x, y, z);
+//				v.normalize();
+				normals.add(v);
 			}
 			else if (arr[0].equals("f")) {
 				int v1 = Integer.parseInt(arr[1].split("//")[0]) - 1;
@@ -69,9 +74,9 @@ public class View extends JFrame {
 				int n1 = Integer.parseInt(arr[1].split("//")[1]) - 1;
 				int n2 = Integer.parseInt(arr[2].split("//")[1]) - 1;
 				int n3 = Integer.parseInt(arr[3].split("//")[1]) - 1;
-				A.setNormal(vertices.get(n1));
-				B.setNormal(vertices.get(n2)); 
-				C.setNormal(vertices.get(n3));
+				A.setNormal(normals.get(n1));
+				B.setNormal(normals.get(n2)); 
+				C.setNormal(normals.get(n3));
 			}
 		}
 		

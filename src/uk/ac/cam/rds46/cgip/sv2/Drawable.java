@@ -18,12 +18,22 @@ public abstract class Drawable extends JPanel {
 		img = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		setPreferredSize(new Dimension(width, height));
 	}
+	
+	public Drawable(BufferedImage i) {
+		width = i.getWidth();
+		height = i.getHeight();
+		img = i;
+	}
 
 	public Drawable (int w, int h) {
 		width = w;
 		height = h;
 		img = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		setPreferredSize(new Dimension(width, height));
+	}
+	
+	public BufferedImage getImage() {
+		return img;
 	}
 
 	@Override
@@ -70,7 +80,6 @@ public abstract class Drawable extends JPanel {
 
 	public void drawLine(int xs, int ys, int xf, int yf) {
 		int octant = getOctant(xs, ys, xf, yf);
-		System.out.println(octant + ": " + xs + " " + ys + " " + xf + " " + yf);
 		
 		int x1 = xs, y1 = ys, x2 = xf, y2 = yf;
 		

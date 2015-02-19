@@ -1,10 +1,19 @@
 package uk.ac.cam.rds46.cgip.sv2;
 
+import java.awt.image.BufferedImage;
+
 public class Circle extends Drawable {
 	private int x0, y0, r;
 	
+	public Circle(BufferedImage img, int x, int y, int radius) {
+		super(img);
+		x0 = x;
+		y0 = y;
+		r = radius;
+	}
+	
 	public Circle(int x, int y, int radius) {
-		super(2 * radius, 2 * radius);
+		super();
 		x0 = x;
 		y0 = y;
 		r = radius;

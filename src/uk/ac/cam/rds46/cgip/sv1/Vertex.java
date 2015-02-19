@@ -69,8 +69,12 @@ public class Vertex {
 		return new Vertex(n * x, n * y, n * z);
 	}
 	
+	public double magnitude() {
+		return Math.sqrt((x * x) + (y * y) + (z * z));
+	}
+	
 	public void normalize() {
-		double n = Math.sqrt(x * x + y * y + z * z);
+		double n = magnitude();
 		x = x / n;
 		y = y / n;
 		z = z / n;

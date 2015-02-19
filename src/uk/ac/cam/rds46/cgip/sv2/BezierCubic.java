@@ -1,8 +1,18 @@
 package uk.ac.cam.rds46.cgip.sv2;
 
+import java.awt.image.BufferedImage;
+
 public class BezierCubic extends Drawable {
 	private Point2D P0, P1, P2, P3;
-	private final double tolerance = 3.3;
+	private final double tolerance = 0.33;
+	
+	public BezierCubic(BufferedImage i, Point2D Q0, Point2D Q1, Point2D Q2, Point2D Q3) {
+		super(i);
+		P0 = new Point2D(Q0);
+		P1 = new Point2D(Q1);
+		P2 = new Point2D(Q2);
+		P3 = new Point2D(Q3);
+	}
 	
 	public BezierCubic(Point2D Q0, Point2D Q1, Point2D Q2, Point2D Q3) {
 		super();

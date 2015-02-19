@@ -13,10 +13,9 @@ public class Rasterizer extends JPanel {
 
 	private final Vertex L; // Light source position.
 
-	public Rasterizer (int w, int h, Surface surf) {
+	public Rasterizer (int w, int h, Surface surf, Vertex light) {
 		s = surf;
-		L = new Vertex(-1, -1, -1); // Assumed fixed light source at a distance.
-		L.normalize();
+		L = light;
 		width = w; height = h;
 		img = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		paintBackground();
@@ -105,26 +104,26 @@ public class Rasterizer extends JPanel {
 	// Interpolating normal at (x, y) in t for Phong shading.
 	public Vertex interpolatedNormal(Triangle t, int x, int y) {
 		Vertex A = t.A, B = t.B, C = t.C;
-		if (t.A.y == t.B.y) {
-			A = t.C; C = t.A;
-		}
-		if (t.A.y == t.C.y) {
-			A = t.B; B = t.A;
-		}
+		Vertex N = t.calculateNormal(), k = new Vertex(0, 0, 1);
 		
-		Vertex Np = A.N.multiplyWith(B.y - y).plus(B.N.multiplyWith(y - A.y));
-		Np.scaleBy(1.0 / (B.y - A.y));
-		Vertex Nq = A.N.multiplyWith(C.y - y).plus(C.N.multiplyWith(y - C.y));
-		Np.scaleBy(1.0 / (C.y - A.y));
-		double mAB = (B.y - A.y) / (B.x - A.x);
-		double mAC = (C.y - A.y) / (C.x - A.x);
-		double Px = (B.x == A.x) ? A.x : ((y - A.y) / mAB) + A.x;
-		double Qx = (C.x == A.x) ? A.x : ((y - A.y) / mAC) + A.x;
+		double z = (N.dotWith(A) - N.dotWith(new Vertex(x, y, 0))) / N.dotWith(k);
+		Vertex P = new Vertex(x, y, z);
+		// Get barycentric coordinates.
+		double alpha = 0.0, beta = 0.0, gamma = 0.0;
 		
-		Vertex Ns = Np.multiplyWith(Qx - x).plus(Nq.multiplyWith(x - Px));
-		Ns.scaleBy(1.0 / (Qx - Px));
-		Ns.normalize();
+		Vertex AB = B.minus(A), AC = C.minus(A), BC = C.minus(B);
+		double area = (AB.crossWith(AC)).magnitude();
+		alpha = ((P.minus(B)).crossWith(BC)).magnitude() / area;
+		beta = ((P.minus(A)).crossWith(AC)).magnitude() / area;
+		gamma = 1.0 - alpha - beta;
 		
-		return Ns;
+		if (alpha < 0.0 || alpha > 1.0 || beta < 0 || beta > 1.0 || gamma < 0.0 || gamma > 1.0)
+			System.out.println("FLAG: " + alpha + " " + beta + " " + gamma);
+		
+		
+		// Interpolate with barycentric coordinates.
+		Vertex normal = ((A.N.multiplyWith(alpha)).plus(B.N.multiplyWith(beta))).plus(C.N.multiplyWith(gamma));
+		normal.normalize();
+		return normal;
 	}
 }
