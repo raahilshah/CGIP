@@ -10,6 +10,9 @@ public class Rasterizer extends JPanel {
 	private BufferedImage img;
 	private int width, height;
 	private Surface s;
+	private int shadingType = 0;
+	
+	private static final int PHONG = 0, FLAT = 1; 
 
 	private final Vertex L; // Light source position.
 
@@ -20,6 +23,12 @@ public class Rasterizer extends JPanel {
 		img = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		paintBackground();
 		setPreferredSize(new Dimension(width, height));
+	}
+	
+	protected void setShading(int shading) {
+		if (shading == FLAT) shadingType = FLAT;
+		else shadingType = PHONG;
+
 	}
 
 	@Override
@@ -124,6 +133,7 @@ public class Rasterizer extends JPanel {
 		// Interpolate with barycentric coordinates.
 		Vertex normal = ((A.N.multiplyWith(alpha)).plus(B.N.multiplyWith(beta))).plus(C.N.multiplyWith(gamma));
 		normal.normalize();
-		return normal;
+//		System.out.println(normal +  " " + N);
+		return (shadingType == PHONG ? normal : N);
 	}
 }

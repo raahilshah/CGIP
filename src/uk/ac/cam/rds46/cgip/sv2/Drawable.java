@@ -9,8 +9,8 @@ import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 
 public abstract class Drawable extends JPanel {
-	private BufferedImage img;
-	private int width, height;
+	protected BufferedImage img;
+	protected int width, height;
 
 	public Drawable() {
 		width = 1024;
@@ -43,7 +43,7 @@ public abstract class Drawable extends JPanel {
 
 	// Overloaded setPixel to use default color. 
 	protected void setPixel(int x, int y) {
-		setPixel(x, y, Color.RED);
+		setPixel(x, y, Color.BLACK);
 	}
 
 	protected void setPixel(int x, int y, Color c) {
