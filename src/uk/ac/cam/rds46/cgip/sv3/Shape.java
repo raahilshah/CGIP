@@ -7,7 +7,7 @@ public abstract class Shape {
 	public double nExp; // Phong's roughness coefficient.
 	public Color color; // Base color for the surface.
 	
-	public abstract Vector intersection(Vector P, Vector D);
+	public abstract double intersection(Vector P, Vector D);
 	public abstract Vector normal(Vector P);
 	
 	public void setSurfaceProperties(double a, double d, double s, double n, Color c) {

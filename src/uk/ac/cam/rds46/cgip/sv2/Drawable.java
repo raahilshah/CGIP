@@ -50,7 +50,7 @@ public abstract class Drawable extends JPanel {
 		// Do nothing if (x, y) are out of bounds.
 		if(img == null || x < 0 || x >= img.getWidth() || y < 0 || y >= img.getHeight()) 
 			return;
-		img.setRGB(x, y, c.getRGB());
+		img.setRGB(x, (img.getHeight() - 1 - y), c.getRGB());
 	}
 
 	public int getOctant(int x1, int y1, int x2, int y2) {

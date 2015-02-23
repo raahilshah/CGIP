@@ -14,17 +14,17 @@ public class Cylinder extends Shape {
 	}
 
 	@Override
-	public Vector intersection(Vector Py, Vector Dy) {
+	public double intersection(Vector Py, Vector Dy) {
 		Vector P = new Vector(Py.x, 0.0, Py.z), D = new Vector(Dy.x, 0.0, Dy.z);
 		Vector C = new Vector(center.x, 0.0, center.z);
 		double d = Math.pow(D.dot(P.minus(C)), 2) - (P.minus(C)).magSquared() + radius * radius;
-		if (d < 0) return null;
+		if (d < 0) return -1;
 		d = Math.sqrt(d);
 		double s = D.dot(C.minus(P)) - d, t = D.dot(C.minus(P)) + d;
 		double y1 = Py.y + s * Dy.y, y2 = Py.y + t * Dy.y;
 		
 		s = Math.abs(s) < Math.abs(t) ? s : t;
-		return Py.plus(Dy.multiply(s));
+		return s;
 		
 		
 //		if (y1 > yMin && y1 < yMax) { 

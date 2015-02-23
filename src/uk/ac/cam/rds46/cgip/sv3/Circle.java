@@ -11,15 +11,14 @@ public class Circle extends Shape {
 		radius = r;
 	}
 	
-	// Intersection point with the ray P + sD.
+	// Intersection with the ray P + sD.
 	@Override
-	public Vector intersection(Vector P, Vector D) {
+	public double intersection(Vector P, Vector D) {
 		double d = Math.pow(D.dot(P.minus(center)), 2) - (P.minus(center)).magSquared() + radius * radius;
-		if (d < 0) return null;
+		if (d < 0) return -1;
 		d = Math.sqrt(d);
 		double s = D.dot(center.minus(P)) - d, t = D.dot(center.minus(P)) + d;
-		s = Math.abs(s) < Math.abs(t) ? s : t;
-		return P.plus(D.multiply(s));
+		return (Math.abs(s) < Math.abs(t) ? s : t);
 	}
 	
 	public boolean onSurface(Vector P) {
@@ -41,7 +40,7 @@ public class Circle extends Shape {
 				Vector S =  new Vector(x, y, 0);
 				Vector P = eye;
 				Vector D = S.minus(eye).normalized();
-				Vector I = circle.intersection(P, D);
+				Vector I = P.plus(D.multiply(circle.intersection(P, D)));
 				if (I != null) {
 					if (!circle.onSurface(I))
 						System.out.println(Math.abs((I.minus(circle.center)).magSquared() - (circle.radius * circle.radius)));
