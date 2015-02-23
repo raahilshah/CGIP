@@ -13,6 +13,8 @@ public class Scene extends Drawable {
 	private Vector eye;
 	private double l, r, t, b;
 	private Color background;
+	
+	private static final double EPSILON = 0.001;
 
 	public Scene() {
 		super();
@@ -31,7 +33,7 @@ public class Scene extends Drawable {
 		t = top;
 		b = bottom;
 	}
-	
+
 	public void setBackground(Color c) {
 		background = c;
 	}
@@ -45,18 +47,20 @@ public class Scene extends Drawable {
 	}
 
 	public Color calculateShade(Vector P, Vector N, Shape s) {
-
 		double I = s.ka;
 		for (Vector LS : lights) {
 			Vector L = (LS.minus(P)).normalized();
-			Vector R = (N.multiply(2.0 * N.dot(L))).minus(L); // Reflection vector.
-			Vector V = (eye.minus(P)).normalized(); 
-			double diffuse = 0.0, specular = 0.0;
-			diffuse = s.kd * (L.dot(N));
-			if (diffuse > 0) {
-				specular = s.ks * Math.pow(R.dot(V), s.nExp);
-				if (specular < 0) specular = 0.0;
-				I += (diffuse + specular);
+			Shape obstr = trace(P, L, EPSILON, Double.POSITIVE_INFINITY);
+			if (obstr == null) {
+				Vector R = (N.multiply(2.0 * N.dot(L))).minus(L); // Reflection vector.
+				Vector V = (eye.minus(P)).normalized(); 
+				double diffuse = 0.0, specular = 0.0;
+				diffuse = s.kd * (L.dot(N));
+				if (diffuse > 0) {
+					specular = s.ks * Math.pow(R.dot(V), s.nExp);
+					if (specular < 0) specular = 0.0;
+					I += (diffuse + specular);
+				}
 			}
 		}
 		if (I > 1.0) I = 1.0;
@@ -67,17 +71,32 @@ public class Scene extends Drawable {
 		return c;
 	}
 
-	public Shape trace(Vector P, Vector D) {
+	public Shape trace(Vector P, Vector D, double sLow, double sHigh) {
 		Shape closest = null;
 		double sMin = Double.POSITIVE_INFINITY;
 		for (Shape shape : objects) {
 			double s = shape.intersection(P, D);
-			if (s != -1 && s < sMin) {
+			if (s != -1 && s < sMin && s >= sLow && s < sHigh) {
 				closest = shape;
 				sMin = s;
 			}
 		}
 		return closest;
+	}
+	
+	public Color rayColor(Vector P, Vector D, double sLow, double sHigh) {
+		Shape hit = trace(P, D, sLow, sHigh);
+		if (hit != null) {
+			Vector intersect = eye.plus(D.multiply(hit.intersection(eye, D)));
+			Vector normal = hit.normal(intersect);
+			Color shade = calculateShade(intersect, normal, hit);
+			Vector R = D.minus(normal.multiply(2 * D.dot(normal))).normalized();
+			Color ref = rayColor(P, R, EPSILON, Double.POSITIVE_INFINITY);
+			return new Color((int)(shade.getRed() + hit.km * ref.getRed()),
+							 (int)(shade.getGreen() + hit.km * ref.getGreen()),
+							 (int)(shade.getBlue() + hit.km * ref.getBlue()));
+		}
+		return background;
 	}
 
 	@Override
@@ -87,15 +106,8 @@ public class Scene extends Drawable {
 				double u = l + ((r - l) * (i + 0.5)) / width;
 				double v = b + ((t - b) * (j + 0.5)) / height;
 				Vector D = (new Vector(u, v, -eye.z)).normalized();
-				Shape closest = trace(eye, D);
-				if (closest != null) {
-					Vector intersect = eye.plus(D.multiply(closest.intersection(eye, D)));
-					Vector normal = closest.normal(intersect);
-					Color shade = calculateShade(intersect, normal, closest);
-					setPixel(i, j, shade);
-				}
-				else
-					setPixel(i, j, background);
+				setPixel(i, j, rayColor(eye, D, 0.0, Double.POSITIVE_INFINITY));
+
 			}
 		}
 	}
