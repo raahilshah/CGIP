@@ -12,7 +12,7 @@ public class Rasterizer extends JPanel {
 	private Surface s;
 	private int shadingType = 0;
 	
-	private static final int PHONG = 0, FLAT = 1; 
+	public static final int PHONG = 0, FLAT = 1; 
 
 	private final Vertex L; // Light source position.
 

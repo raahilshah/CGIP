@@ -20,7 +20,7 @@ public class View extends JFrame {
 		super("CGIP SV1 - Triangle Rasterizer");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		Surface s = new Surface(0.0, 0.7, 0.2, 1, new Color(10, 160, 250));
-		Vertex L = new Vertex(1, -1, 1); // Assumed fixed light source at a distance.
+		Vertex L = new Vertex(1, 1, -1); // Assumed fixed light source at a distance.
 		L.normalize();
 		r = new Rasterizer(WIDTH, HEIGHT, s, L);
 		

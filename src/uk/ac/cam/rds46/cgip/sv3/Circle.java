@@ -11,14 +11,6 @@ public class Circle extends Shape {
 		radius = r;
 	}
 	
-	public void setSurfaceProperties(double a, double d, double s, double n, Color c) {
-		ka = a;
-		kd = d;
-		ks = s;
-		nExp = n;
-		color = c;
-	}
-	
 	// Intersection point with the ray P + sD.
 	@Override
 	public Vector intersection(Vector P, Vector D) {
@@ -31,28 +23,28 @@ public class Circle extends Shape {
 	}
 	
 	public boolean onSurface(Vector P) {
-		double epsilon = 1.0E-10;
+		double epsilon = 1.0E-9;
 		return Math.abs((P.minus(center)).magSquared() - (radius * radius)) < epsilon;
 	}
 	
 	@Override
 	public Vector normal(Vector P) {
-		if (!onSurface(P)) return null;
-		else return (P.minus(center)).normalized();
+			return (P.minus(center)).normalized();
 	}
 	
 	public static void main(String[] args) {
 		
 		Circle circle = new Circle(50, 50, 50, 30);
-		
-		Vector D = new Vector(0, 0, 1);
+		Vector eye = new Vector(500, 500, -1000);
 		for (int x = 0; x <= 100; x++) {
 			for (int y = 0; y <= 100; y++) {
-				Vector P = new Vector(x, y, 0);
+				Vector S =  new Vector(x, y, 0);
+				Vector P = eye;
+				Vector D = S.minus(eye).normalized();
 				Vector I = circle.intersection(P, D);
 				if (I != null) {
 					if (!circle.onSurface(I))
-						System.out.println(I);
+						System.out.println(Math.abs((I.minus(circle.center)).magSquared() - (circle.radius * circle.radius)));
 				}
 			}
 		}
