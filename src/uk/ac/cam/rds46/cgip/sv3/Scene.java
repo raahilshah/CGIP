@@ -50,7 +50,7 @@ public class Scene extends Drawable {
 		double I = s.ka;
 		for (Vector LS : lights) {
 			Vector L = (LS.minus(P)).normalized();
-			Shape obstr = trace(P, L, EPSILON, Double.POSITIVE_INFINITY);
+			Shape obstr = null; //trace(P, L, EPSILON, Double.POSITIVE_INFINITY);
 			if (obstr == null) {
 				Vector R = (N.multiply(2.0 * N.dot(L))).minus(L); // Reflection vector.
 				Vector V = (eye.minus(P)).normalized(); 
@@ -92,9 +92,9 @@ public class Scene extends Drawable {
 			Color shade = calculateShade(intersect, normal, hit);
 			Vector R = D.minus(normal.multiply(2 * D.dot(normal))).normalized();
 			Color ref = rayColor(P, R, EPSILON, Double.POSITIVE_INFINITY);
-			return new Color((int)(shade.getRed() + hit.km * ref.getRed()),
-							 (int)(shade.getGreen() + hit.km * ref.getGreen()),
-							 (int)(shade.getBlue() + hit.km * ref.getBlue()));
+			return new Color((int)(Math.min(shade.getRed() + hit.km * ref.getRed(), 255)),
+							 (int)(Math.min(shade.getGreen() + hit.km * ref.getGreen(), 255)),
+							 (int)(Math.min(shade.getBlue() + hit.km * ref.getBlue(), 255)));
 		}
 		return background;
 	}
